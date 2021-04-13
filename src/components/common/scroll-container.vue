@@ -1,0 +1,150 @@
+<!--滚动容器-->
+<template>
+  <div :style="styleStr" id="container" ref="container" class="container">
+    <div ref="content" class="content">
+      <slot></slot>
+    </div>
+    <div ref="rightScrollBar" class="right-scroll-bar"></div>
+  </div>
+  <div style="text-align:center;">
+    <button @click="test">测试</button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "scroll-container",
+  props: {
+    width: {
+      type: String,
+      default: '100px'
+    },
+    height: {
+      type: String,
+      default: '100px'
+    },
+    direction: {
+      type: String,
+      default: 'right'
+    },
+    bothDirection: {
+      type: Boolean,
+      default: false
+    },
+    step: {
+      type: Number,
+      default: 5
+    },
+    dragAble: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      styleStr: '',
+      container: {},
+      content: {},
+      rightScrollBar: {},
+      containerHeight: 0,
+      contentHeight: 0,
+    }
+  },
+  created() {
+    this.styleStr = 'background-color:#ccc;width:' + this.width + ';height:' + this.height
+    console.log(this.styleStr);
+  },
+  mounted() {
+    // 保存容器和内容dom
+    this.container = this.$refs.container
+    this.content = this.$refs.content
+    this.rightScrollBar = this.$refs.rightScrollBar
+    this.containerHeight = this.container.offsetHeight
+    this.contentHeight = this.content.offsetHeight
+    //设置滚动条高度
+    if (this.contentHeight<=this.containerHeight) {
+      this.rightScrollBar.style.opacity = 0
+    } else {
+      this.rightScrollBar.style.height = this.containerHeight/this.contentHeight*100 + '%'
+    }
+    /*
+    * 设置鼠标滚动监听事件
+    * */
+    //兼容完整处理 通过浏览器判断
+    const browser = window.navigator.userAgent
+        .toLowerCase()
+        .indexOf("firefox");
+    if (browser != -1) {
+      //处理火狐滚轮事件
+      document.addEventListener("DOMMouseScroll", (ev) => {
+        var oEvent = ev || event;
+        //上下滚轮动作判断
+        if (oEvent.detail < 0) {
+          // 向上滚动
+          this.scrollUp()
+        } else {
+          this.scrollDown()
+        }
+      });
+    } else {
+      //其他浏览器
+      document.onmousewheel = (ev) => {
+        const oEvent = ev || event;
+        //上下滚轮动作判断
+        if (oEvent.wheelDelta > 0) {
+          // 向上滚动
+          this.scrollUp()
+        } else {
+          this.scrollDown()
+        }
+      };
+    }
+  },
+  methods: {
+    test () {
+      console.log('容器高度', this.container.offsetHeight);
+      console.log('内容高度', this.content.offsetHeight);
+    },
+    // 向上滚动
+    scrollUp () {
+      // console.log('up');
+      let top = Number(this.content.style.top.replace('px',''))
+      if (top < 0) {
+        top + this.step > 0 ? this.content.style.top = '0px' : this.content.style.top = top + this.step + 'px'
+        this.rightScrollBar.style.top = -top / (this.contentHeight - this.containerHeight) * 100 * (1 - this.containerHeight/this.contentHeight) + '%'
+      }
+    },
+    // 向下滚动
+    scrollDown (){
+      // console.log('down');
+      let top = Number(this.content.style.top.replace('px',''))
+      if (-top < this.contentHeight - this.containerHeight) {
+        -top + this.step > this.contentHeight - this.containerHeight ? this.content.style.top = this.containerHeight - this.contentHeight + 'px' : this.content.style.top = top - this.step + 'px'
+        this.rightScrollBar.style.top = -top / (this.contentHeight - this.containerHeight) * 100 * (1 - this.containerHeight/this.contentHeight) + '%'
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.container {
+  position: relative;
+  overflow: hidden;
+}
+.right-scroll-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(100,100,100,.5);
+  width: 5px;
+  opacity: 0;
+  /*border-radius: 5px;*/
+}
+.container:hover .right-scroll-bar {
+  opacity: 1;
+}
+.content {
+  position: relative;
+}
+</style>
