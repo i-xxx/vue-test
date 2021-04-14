@@ -6,9 +6,9 @@
     </div>
     <div ref="rightScrollBar" class="right-scroll-bar"></div>
   </div>
-  <div style="text-align:center;">
+<!--  <div style="text-align:center;">
     <button @click="test">测试</button>
-  </div>
+  </div>-->
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
     },
     height: {
       type: String,
-      default: '100px'
+      default: '100%'
     },
     direction: {
       type: String,
@@ -51,7 +51,7 @@ export default {
     }
   },
   created() {
-    this.styleStr = 'background-color:#ccc;width:' + this.width + ';height:' + this.height
+    this.styleStr = 'background-color:#ddd' + ';padding-right:5px' + ';width:' + this.width + ';height:' + this.height
     console.log(this.styleStr);
   },
   mounted() {
@@ -65,7 +65,12 @@ export default {
     if (this.contentHeight<=this.containerHeight) {
       this.rightScrollBar.style.opacity = 0
     } else {
-      this.rightScrollBar.style.height = this.containerHeight/this.contentHeight*100 + '%'
+      if ((this.containerHeight/this.contentHeight) * +this.height.replace('px', '') < 20) {
+        this.rightScrollBar.style.height = '20px'
+        console.log('ok');
+      } else {
+        this.rightScrollBar.style.height = this.containerHeight/this.contentHeight*100 + '%'
+      }
     }
     /*
     * 设置鼠标滚动监听事件
@@ -76,7 +81,7 @@ export default {
         .indexOf("firefox");
     if (browser != -1) {
       //处理火狐滚轮事件
-      document.addEventListener("DOMMouseScroll", (ev) => {
+      this.container.addEventListener("DOMMouseScroll", (ev) => {
         var oEvent = ev || event;
         //上下滚轮动作判断
         if (oEvent.detail < 0) {
@@ -88,7 +93,7 @@ export default {
       });
     } else {
       //其他浏览器
-      document.onmousewheel = (ev) => {
+      this.container.onmousewheel = (ev) => {
         const oEvent = ev || event;
         //上下滚轮动作判断
         if (oEvent.wheelDelta > 0) {
@@ -99,6 +104,9 @@ export default {
         }
       };
     }
+    /*
+    *
+    * */
   },
   methods: {
     test () {
@@ -111,7 +119,7 @@ export default {
       let top = Number(this.content.style.top.replace('px',''))
       if (top < 0) {
         top + this.step > 0 ? this.content.style.top = '0px' : this.content.style.top = top + this.step + 'px'
-        this.rightScrollBar.style.top = -top / (this.contentHeight - this.containerHeight) * 100 * (1 - this.containerHeight/this.contentHeight) + '%'
+        this.rightScrollBar.style.top = -Number(this.content.style.top.replace('px','')) / (this.contentHeight - this.containerHeight) * 100 * (1 - this.containerHeight/this.contentHeight) + '%'
       }
     },
     // 向下滚动
@@ -120,7 +128,7 @@ export default {
       let top = Number(this.content.style.top.replace('px',''))
       if (-top < this.contentHeight - this.containerHeight) {
         -top + this.step > this.contentHeight - this.containerHeight ? this.content.style.top = this.containerHeight - this.contentHeight + 'px' : this.content.style.top = top - this.step + 'px'
-        this.rightScrollBar.style.top = -top / (this.contentHeight - this.containerHeight) * 100 * (1 - this.containerHeight/this.contentHeight) + '%'
+        this.rightScrollBar.style.top = -Number(this.content.style.top.replace('px','')) / (this.contentHeight - this.containerHeight) * 100 * (1 - this.containerHeight/this.contentHeight) + '%'
       }
     }
   }
@@ -139,7 +147,7 @@ export default {
   background-color: rgba(100,100,100,.5);
   width: 5px;
   opacity: 0;
-  /*border-radius: 5px;*/
+  border-radius: 5px;
 }
 .container:hover .right-scroll-bar {
   opacity: 1;

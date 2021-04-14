@@ -73,7 +73,7 @@ import homeChildren from '@/router/home-children'
       left: 0;
       bottom: 0;
       box-sizing: border-box;
-      overflow-y: scroll;
+      overflow-y: auto;
       background-color: #fee;
     }
     .right-part {
