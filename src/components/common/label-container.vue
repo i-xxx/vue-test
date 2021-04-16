@@ -2,7 +2,9 @@
 <div>
   <div ref="container" class="container">
     <slot></slot>
-    <div ref="content" class="content">{{innerText}}</div>
+    <div ref="content" class="content">
+      <span>{{innerText}}</span>
+    </div>
   </div>
 </div>
 </template>
@@ -47,6 +49,9 @@ export default {
   top: 25%;
   right: 25%;
   font-size: 12px;
+  text-align: center;
+  width: 100%;
+  opacity: 0.7;
   transform: translate(50%, -50%);
   background-color: #ffc800;
 }

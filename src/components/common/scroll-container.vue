@@ -48,6 +48,7 @@ export default {
       rightScrollBar: {},
       containerHeight: 0,
       contentHeight: 0,
+      isFocusOnRightScrollBar: false,
     }
   },
   created() {
@@ -56,57 +57,15 @@ export default {
   },
   mounted() {
     // 保存容器和内容dom
-    this.container = this.$refs.container
-    this.content = this.$refs.content
-    this.rightScrollBar = this.$refs.rightScrollBar
-    this.containerHeight = this.container.offsetHeight
-    this.contentHeight = this.content.offsetHeight
+    this.saveContainer()
     //设置滚动条高度
-    if (this.contentHeight<=this.containerHeight) {
-      this.rightScrollBar.style.opacity = 0
-    } else {
-      if ((this.containerHeight/this.contentHeight) * +this.height.replace('px', '') < 20) {
-        this.rightScrollBar.style.height = '20px'
-        console.log('ok');
-      } else {
-        this.rightScrollBar.style.height = this.containerHeight/this.contentHeight*100 + '%'
-      }
-    }
-    /*
-    * 设置鼠标滚动监听事件
-    * */
-    //兼容完整处理 通过浏览器判断
-    const browser = window.navigator.userAgent
-        .toLowerCase()
-        .indexOf("firefox");
-    if (browser != -1) {
-      //处理火狐滚轮事件
-      this.container.addEventListener("DOMMouseScroll", (ev) => {
-        var oEvent = ev || event;
-        //上下滚轮动作判断
-        if (oEvent.detail < 0) {
-          // 向上滚动
-          this.scrollUp()
-        } else {
-          this.scrollDown()
-        }
-      });
-    } else {
-      //其他浏览器
-      this.container.onmousewheel = (ev) => {
-        const oEvent = ev || event;
-        //上下滚轮动作判断
-        if (oEvent.wheelDelta > 0) {
-          // 向上滚动
-          this.scrollUp()
-        } else {
-          this.scrollDown()
-        }
-      };
-    }
-    /*
-    *
-    * */
+    this.initScrollBar()
+    // 设置鼠标滚动监听事件
+    this.setMouseScrollListener()
+    // 监听滚动条点击
+    this.setScrollBarClickListener()
+    // 监听鼠标移动
+    this.setMouseMoveListener()
   },
   methods: {
     test () {
@@ -129,6 +88,82 @@ export default {
       if (-top < this.contentHeight - this.containerHeight) {
         -top + this.step > this.contentHeight - this.containerHeight ? this.content.style.top = this.containerHeight - this.contentHeight + 'px' : this.content.style.top = top - this.step + 'px'
         this.rightScrollBar.style.top = -Number(this.content.style.top.replace('px','')) / (this.contentHeight - this.containerHeight) * 100 * (1 - this.containerHeight/this.contentHeight) + '%'
+      }
+    },
+    /*
+    * 初始化设置
+    * */
+    // 保存容器和内容dom
+    saveContainer () {
+      this.container = this.$refs.container
+      this.content = this.$refs.content
+      this.rightScrollBar = this.$refs.rightScrollBar
+      this.containerHeight = this.container.offsetHeight
+      this.contentHeight = this.content.offsetHeight
+    },
+    //设置滚动条高度
+    initScrollBar () {
+      if (this.contentHeight<=this.containerHeight) {
+        this.rightScrollBar.style.opacity = 0
+      } else {
+        if ((this.containerHeight/this.contentHeight) * +this.height.replace('px', '') < 20) {
+          this.rightScrollBar.style.height = '20px'
+          console.log('ok');
+        } else {
+          this.rightScrollBar.style.height = this.containerHeight/this.contentHeight*100 + '%'
+        }
+      }
+    },
+    // 监听设置鼠标滚动事件
+    setMouseScrollListener () {
+      //兼容完整处理 通过浏览器判断
+      const browser = window.navigator.userAgent
+          .toLowerCase()
+          .indexOf("firefox");
+      if (browser != -1) {
+        //处理火狐滚轮事件
+        this.container.addEventListener("DOMMouseScroll", (ev) => {
+          var oEvent = ev || event;
+          //上下滚轮动作判断
+          if (oEvent.detail < 0) {
+            // 向上滚动
+            this.scrollUp()
+          } else {
+            this.scrollDown()
+          }
+        });
+      } else {
+        //其他浏览器
+        this.container.onmousewheel = (ev) => {
+          const oEvent = ev || event;
+          //上下滚轮动作判断
+          if (oEvent.wheelDelta > 0) {
+            // 向上滚动
+            this.scrollUp()
+          } else {
+            this.scrollDown()
+          }
+        };
+      }
+    },
+    // 监听滚动条点击事件
+    setScrollBarClickListener () {
+      this.rightScrollBar.onmousedown = () => {
+        this.isFocusOnRightScrollBar = true
+      }
+      this.rightScrollBar.onmouseup = () => {
+        this.isFocusOnRightScrollBar = false
+      }
+    },
+    // 监听鼠标移动事件
+    setMouseMoveListener () {
+      document.onmousemove = (ev) => {
+        const oEvent = ev || event;
+        console.log('鼠标坐标', oEvent.offsetX, oEvent.offsetY);
+        // eslint-disable-next-line no-empty
+        if (this.isFocusOnRightScrollBar) {
+
+        }
       }
     }
   }
