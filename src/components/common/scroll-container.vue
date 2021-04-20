@@ -149,20 +149,21 @@ export default {
     // 监听滚动条点击事件
     setScrollBarClickListener () {
       this.rightScrollBar.onmousedown = () => {
+        console.log('down');
         this.isFocusOnRightScrollBar = true
       }
-      this.rightScrollBar.onmouseup = () => {
+      document.onmouseup = () => {
         this.isFocusOnRightScrollBar = false
       }
     },
     // 监听鼠标移动事件
     setMouseMoveListener () {
-      document.onmousemove = (ev) => {
-        const oEvent = ev || event;
-        console.log('鼠标坐标', oEvent.offsetX, oEvent.offsetY);
-        // eslint-disable-next-line no-empty
-        if (this.isFocusOnRightScrollBar) {
-
+      // 当鼠标点击滚动条后触发事件
+      if (this.isFocusOnRightScrollBar) {
+        // 设置flag，保存第一次移动鼠标
+        document.onmousemove = (ev) => {
+          const oEvent = ev || event;
+          console.log('鼠标坐标', oEvent.offsetX, oEvent.offsetY);
         }
       }
     }

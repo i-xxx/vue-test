@@ -3,6 +3,8 @@
     <span>登录页</span>
     <div style="height: 50px;"></div>
     <button @click="loginSuccess">登陆成功</button>
+    <div style="height: 50px;"></div>
+    <button @click="test">测试</button>
   </div>
 </template>
 
@@ -18,6 +20,9 @@
     methods: {
       loginSuccess () {
         this.$router.push('./home')
+      },
+      test () {
+        this.$test()
       }
     },
   }
