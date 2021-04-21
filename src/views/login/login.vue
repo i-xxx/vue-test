@@ -5,6 +5,8 @@
     <button @click="loginSuccess">登陆成功</button>
     <div style="height: 50px;"></div>
     <button @click="test">测试</button>
+    <div style="height: 50px;"></div>
+    <button @click="closeTest">闭包</button>
   </div>
 </template>
 
@@ -22,7 +24,22 @@
         this.$router.push('./home')
       },
       test () {
-        this.$test()
+        // this.$store.commit('test',{num1: 1,num2:10})
+        this.$store.dispatch('disTest',{num1: 1,num2:10})
+      },
+      closeTest () {
+        var i = 0
+        for (i ; i < 10; i++) {
+          console.log(i);
+        }
+        console.log('ok');
+        function fun () {
+          var i
+          for ( i= 0; i < 5; i++) {
+            console.log(i);
+          }
+        }
+        fun()
       }
     },
   }
