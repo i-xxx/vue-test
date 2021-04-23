@@ -21,7 +21,7 @@ import homeChildren from '@/router/home-children'
     data() {
       return {
         timer: '',
-        activeIndex: 1,
+        activeIndex: 3,
         path: '',
         homeChildren: []
       }

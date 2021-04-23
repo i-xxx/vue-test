@@ -13,5 +13,10 @@ export default [
     path: '/home/label-test',
     component: () => import('@/views/home/label-test'),
     title: '标签提示'
+  },
+  {
+    path: '/home/mui-test',
+    component: () => import('@/views/home/mui-test'),
+    title: 'mui框架图片预览'
   }
 ]
