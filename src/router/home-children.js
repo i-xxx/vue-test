@@ -18,5 +18,10 @@ export default [
     path: '/home/mui-test',
     component: () => import('@/views/home/mui-test'),
     title: 'mui框架图片预览'
+  },
+  {
+    path: '/home/switch-test',
+    component: () => import('@/views/home/switch-test'),
+    title: 'switch组件'
   }
 ]

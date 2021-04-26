@@ -21,7 +21,7 @@ import homeChildren from '@/router/home-children'
     data() {
       return {
         timer: '',
-        activeIndex: 3,
+        activeIndex: 4,
         path: '',
         homeChildren: []
       }
@@ -32,6 +32,7 @@ import homeChildren from '@/router/home-children'
     },
     created() {
       this.homeChildren = homeChildren
+      this.activeIndex = this.homeChildren.length-1
       this.activeChange(this.homeChildren[this.activeIndex], this.activeIndex)
       /*let startTime = new Date().getTime()
       let currentTime = 0

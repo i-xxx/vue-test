@@ -2,7 +2,7 @@
   <div style="font-size: 16px;font-weight: 500;text-align:center;">
     <span>登录页</span>
     <div style="height: 50px;"></div>
-    <button @click="loginSuccess">登陆成功</button>
+    <button @click="loginSuccess">登陆成功啦</button>
     <div style="height: 50px;"></div>
     <button @click="test">测试</button>
     <div style="height: 50px;"></div>
@@ -21,6 +21,7 @@
     computed: {},
     methods: {
       loginSuccess () {
+        console.log('登陆成功');
         this.$router.push('./home')
       },
       test () {
