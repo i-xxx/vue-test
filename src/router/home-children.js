@@ -23,5 +23,10 @@ export default [
     path: '/home/switch-test',
     component: () => import('@/views/home/switch-test'),
     title: 'switch组件'
+  },
+  {
+    path: '/home/message-test',
+    component: () => import('@/views/home/message-test'),
+    title: '全局message提示'
   }
 ]

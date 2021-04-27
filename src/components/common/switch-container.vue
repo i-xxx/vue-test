@@ -1,10 +1,10 @@
 <template>
-<div class="container" :style="[{width},{height}]">
+<div class="container"
+     :style="[{width},{height},{'background-color':isActive?activeColor:inActiveColor}]"
+     @click="activeChange">
   <div class="content-circle"
-       @click="activeFlag=!activeFlag"
-       :class="[{'active':activeFlag},{'inActive':!activeFlag}]"
-       :style="[{width:height},{height},{lineHeight:height}]">
-    {{activeFlag?activeStr:inActiveStr}}
+       :style="[{width:height},{height},{lineHeight:lineHeight},{left:isActive?positionLeft:'0'}]">
+    {{isActive?activeStr:inActiveStr}}
   </div>
 </div>
 </template>
@@ -12,14 +12,19 @@
 <script>
 export default {
   name: "switch-container",
+  emits: ['update:isActive'],
   props: {
+    isActive: {
+      type: [Boolean, String, Number],
+      default: false
+    },
     width: {
       type: String,
       default: '80px'
     },
     height: {
       type: String,
-      default: '20px'
+      default: '30px'
     },
     activeStr: {
       type: String,
@@ -29,44 +34,54 @@ export default {
       type: String,
       default: '修'
     },
-    isActive: {
-      type: Boolean,
-      default: false
+    activeColor: {
+      type: String,
+      default: '#00B9EE'
+    },
+    inActiveColor: {
+      type: String,
+      default: '#D7D7D7'
     }
   },
-  data () {
-    return {
-      activeFlag: false
+  computed: {
+    lineHeight () {
+      let res = this.height.replace(/[^\d]/g, '') - 2 + this.height.replace(/[\d]/g,'')
+      return res
+    },
+    positionLeft () {
+      let res = this.width.replace(/[^\d]/g, '') - this.height.replace(/[^\d]/g,'') + this.height.replace(/[\d]/g,'')
+      return res
     }
   },
-  created() {
-    this.activeFlag = this.isActive
+  methods: {
+    activeChange () {
+      this.$emit('update:isActive',!this.isActive)
+    }
   }
 }
 </script>
 
 <style scoped>
 .container {
+  box-sizing: content-box;
   position: relative;
   border-radius: 9999px;
   background-color: #ddd;
-  border: 3px solid #ddd;
+  /*border: 3px solid #ddd;*/
   display: inline-block;
+  cursor: pointer;
 }
 .content-circle {
   position: absolute;
   top: 0;
   background-color: #fff;
+  border: 1px solid #999;
+  box-sizing: border-box;
   border-radius: 50%;
   user-select: none;
-  cursor: pointer;
   text-align: center;
-  font-size: 12px;
-}
-.active {
-  right: 0;
-}
-.inActive {
-  left: 0;
+  font-size: 14px;
+  color: #333;
+  transition: 100ms 0s left linear;
 }
 </style>
