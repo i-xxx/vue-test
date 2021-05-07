@@ -10,6 +10,11 @@ export default [
     title: '滚动容器测试'
   },
   {
+    path: '/home/scroll-y-test',
+    component: () => import('@/views/home/scroll-y-test'),
+    title: 'y轴滚动条'
+  },
+  {
     path: '/home/label-test',
     component: () => import('@/views/home/label-test'),
     title: '标签提示'

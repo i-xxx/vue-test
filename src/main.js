@@ -10,9 +10,10 @@ const app = createApp(App)
 app.use(store)
 app.use(router)
 // 使用消息组件
-app.use(Message)
-app.config.globalProperties.$my_message = (data) => {
-    console.log(data);
+// app.use(Message)
+app.config.globalProperties.$xxx_message = (data) => {
+    console.log(data.type);
+    console.log(data.message);
     Message.install()
 }
 

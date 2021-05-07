@@ -2,6 +2,7 @@
 <div style="text-align:center;">
   <div style="text-align:center;">message提示</div>
   <button @click="errorMessage">错误提示</button>
+  <button @click="successMessage">成功提示</button>
 </div>
 </template>
 
@@ -10,7 +11,16 @@ export default {
   name: "message-container",
   methods: {
     errorMessage () {
-      this.$my_message('错了')
+      this.$xxx_message({
+        type: 'error',
+        message: '错了哦'
+      })
+    },
+    successMessage () {
+      this.$xxx_message({
+        type: 'success',
+        message: '成功了'
+      })
     }
   }
 }

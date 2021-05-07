@@ -4,7 +4,7 @@
     <div ref="content" class="content">
       <slot></slot>
     </div>
-    <div ref="rightScrollBar" class="right-scroll-bar"></div>
+    <div @click.stop ref="rightScrollBar" :style="{opacity: isShow?1:0}" class="right-scroll-bar"></div>
   </div>
 <!--  <div style="text-align:center;">
     <button @click="test">测试</button>
@@ -46,18 +46,24 @@ export default {
       container: {},
       content: {},
       rightScrollBar: {},
+      isShow: false,
       containerHeight: 0,
       contentHeight: 0,
       isFocusOnRightScrollBar: false,
+      currentY: 0,
+      offsetContainerY: 0
     }
   },
   created() {
     this.styleStr = 'background-color:#ddd' + ';padding-right:5px' + ';width:' + this.width + ';height:' + this.height
     console.log(this.styleStr);
+    console.log('哇哈哈哈',this)
   },
   mounted() {
     // 保存容器和内容dom
     this.saveContainer()
+    // 设置滚动条显隐
+    this.setIsShow()
     //设置滚动条高度
     this.initScrollBar()
     // 设置鼠标滚动监听事件
@@ -66,6 +72,9 @@ export default {
     this.setScrollBarClickListener()
     // 监听鼠标移动
     this.setMouseMoveListener()
+    document.onmouseup = () => {
+      this.isShow = false
+    }
   },
   methods: {
     test () {
@@ -108,9 +117,20 @@ export default {
       } else {
         if ((this.containerHeight/this.contentHeight) * +this.height.replace('px', '') < 20) {
           this.rightScrollBar.style.height = '20px'
-          console.log('ok');
+          // console.log('ok');
         } else {
           this.rightScrollBar.style.height = this.containerHeight/this.contentHeight*100 + '%'
+        }
+      }
+    },
+    // 设置滚动条显隐
+    setIsShow () {
+      this.container.onmouseenter = () => {
+        this.isShow = true
+      }
+      this.container.onmouseleave = () => {
+        if (!this.isFocusOnRightScrollBar) {
+          this.isShow = false
         }
       }
     },
@@ -148,9 +168,15 @@ export default {
     },
     // 监听滚动条点击事件
     setScrollBarClickListener () {
-      this.rightScrollBar.onmousedown = () => {
-        console.log('down');
+      this.rightScrollBar.onmousedown = (ev) => {
+        const oEvent = ev || event;
+        // console.log(oEvent.clientY);
         this.isFocusOnRightScrollBar = true
+        // 保存当前鼠标相对与浏览器纵坐标位置
+        this.currentY = oEvent.clientY
+        //  保存滚动条当前相对于容器位置
+        this.offsetContainerY = this.rightScrollBar.offsetTop
+        // console.log('hh',this.rightScrollBar.offsetTop);
       }
       document.onmouseup = () => {
         this.isFocusOnRightScrollBar = false
@@ -159,11 +185,30 @@ export default {
     // 监听鼠标移动事件
     setMouseMoveListener () {
       // 当鼠标点击滚动条后触发事件
-      if (this.isFocusOnRightScrollBar) {
-        // 设置flag，保存第一次移动鼠标
-        document.onmousemove = (ev) => {
-          const oEvent = ev || event;
-          console.log('鼠标坐标', oEvent.offsetX, oEvent.offsetY);
+      document.onmousemove = (ev) => {
+        const oEvent = ev || event;
+        // 当点击滚动条时移动
+        if (this.isFocusOnRightScrollBar) {
+          // console.log('鼠标坐标', oEvent.clientX, oEvent.clientY);
+        //  判断滚动条单位,保存滚动条可移动距离（px）
+          let length = 0
+          if (this.rightScrollBar.style.height.indexOf('%')!==-1) {
+            length = +this.containerHeight - this.containerHeight*(this.rightScrollBar.style.height.replace('%','')/100)
+          } else {
+            length = +this.containerHeight - (+this.rightScrollBar.style.height.replace('px',''))
+          }
+          console.log('可移动高度：',length);
+          //  判断鼠标        移动距离，根据移动滚动条
+          let distance = oEvent.clientY - this.currentY
+          console.log('鼠标移动距离',distance);
+          // 当向上移动距离超出容器
+          if (-(oEvent.clientY - this.currentY) > this.offsetContainerY) {
+            this.rightScrollBar.style.top = '0px'
+          } else if ((oEvent.clientY - this.currentY) > this.scrollHeight - this.offsetContainerY - 20) {
+            this.rightScrollBar.style.top = this.scrollHeight - 20 + 'px'
+          } else {
+            this.rightScrollBar.style.top = distance + 'px'
+          }
         }
       }
     }
