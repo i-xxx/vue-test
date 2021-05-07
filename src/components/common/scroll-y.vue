@@ -77,12 +77,16 @@ export default {
       this.$refs.rightScrollBar.onmousedown = (ev) => {
         const oEvent = ev || event;
         // 保存点击时容器到浏览器顶部与鼠标到滚动条顶部距离之和
-        this.totalLength = oEvent.clientY - this.$refs.rightScrollBar.offsetTop
-        this.clickFlag = true
+        if (oEvent.which === 1) {
+          this.totalLength = oEvent.clientY - this.$refs.rightScrollBar.offsetTop
+          this.clickFlag = true
+        }
       }
-      document.onmouseup = () => {
-        console.log('up');
-        this.clickFlag = false
+      document.onmouseup = (ev) => {
+        const oEvent = ev || event;
+        if (oEvent.which === 1) {
+          this.clickFlag = false
+        }
       }
     },
     // 设置移动事件监听
