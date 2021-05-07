@@ -22,8 +22,6 @@ export default {
       totalLength: 0
     }
   },
-  created() {
-  },
   mounted() {
     this.init()
   },
@@ -34,17 +32,17 @@ export default {
       this.setClickListener()
       this.setMoveListener()
     },
-    //  设置容器滚动监听
+    // 设置容器滚动监听
     setScrollListener () {
       //兼容完整处理 通过浏览器判断
       const browser = window.navigator.userAgent
           .toLowerCase()
           .indexOf("firefox");
-      if (browser != -1) {
+      if (browser !== -1) {
         //处理火狐滚轮事件
         this.$refs.container.addEventListener("DOMMouseScroll", (ev) => {
           const oEvent = ev || event;
-          let top = 0
+          let top
           //上下滚轮动作判断
           if (oEvent.detail < 0) {
             // 向上滚动
@@ -59,7 +57,7 @@ export default {
         //其他浏览器
         this.$refs.container.onmousewheel = (ev) => {
           const oEvent = ev || event;
-          let top = 0
+          let top
           //上下滚轮动作判断
           if (oEvent.wheelDelta > 0) {
             // 向上滚动
@@ -98,7 +96,7 @@ export default {
         }
       }
     },
-    //  根据content的top值控制content滚动
+    // 根据content的top值控制content滚动
     scrollByContent (top) {
       if (top > 0) {
         this.$refs.content.style.top = '0px'
@@ -113,7 +111,7 @@ export default {
           * (this.$refs.container.offsetHeight - this.$refs.rightScrollBar.offsetHeight)
           + 'px'
     },
-    //  根据scrollBar的top值控制content滚动
+    // 根据scrollBar的top值控制content滚动
     scrollByBar (top) {
       if (top < 0) {
         this.$refs.rightScrollBar.style.top = '0px'

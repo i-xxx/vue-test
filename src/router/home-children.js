@@ -5,11 +5,6 @@ export default [
     title: '测试'
   },
   {
-    path: '/home/scroll-test',
-    component: () => import('@/views/home/scroll-test'),
-    title: '滚动容器测试'
-  },
-  {
     path: '/home/scroll-y-test',
     component: () => import('@/views/home/scroll-y-test'),
     title: 'y轴滚动条'
