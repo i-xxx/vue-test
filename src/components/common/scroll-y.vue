@@ -1,9 +1,8 @@
 <template>
   <div ref="container" class="container">
-    <div ref="content" class="content">
+    <div ref="content" class="content" :style="{'user-select': clickFlag?'none':''}">
       <slot></slot>
     </div>
-    <div v-show="clickFlag" style="top: 0;right: 5px;bottom: 0;left: 0;background-color:rgba(100,100,100,0.2);position: absolute"></div>
     <div ref="rightScrollBar" class="right-scroll-bar"></div>
   </div>
 </template>
@@ -82,6 +81,7 @@ export default {
         this.clickFlag = true
       }
       document.onmouseup = () => {
+        console.log('up');
         this.clickFlag = false
       }
     },
