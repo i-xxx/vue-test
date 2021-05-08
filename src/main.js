@@ -14,8 +14,6 @@ app.use(ElementPlus)
 // 使用消息组件
 // app.use(Message)
 app.config.globalProperties.$xxx_message = (data) => {
-    console.log(data.type);
-    console.log(data.message);
     Message.install(data)
 }
 

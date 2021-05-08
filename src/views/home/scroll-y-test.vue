@@ -2,7 +2,7 @@
 <div>
   <div style="margin-top: 20px;">y轴滚动条测试</div>
   <div style="border: 1px solid #ddd;width: 100px;height: 100px;">
-<scroll-y>
+<scroll-y :isHiddenBar="true">
   <div v-for="i in 20" :key="i">
     哈哈哈哈哈{{i}}哈哈哈{{i}}哈哈哈{{i}}
   </div>

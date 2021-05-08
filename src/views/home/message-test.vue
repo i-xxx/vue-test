@@ -5,6 +5,7 @@
   <button @click="successMessage">成功</button>
   <button @click="warningMessage">警告</button>
   <button @click="infoMessage">消息</button>
+  <button @click="test">测试</button>
 </div>
 </template>
 
@@ -36,6 +37,13 @@ export default {
         type: 'info',
         message: '消息提示，小垃圾'
       })
+    },
+    test () {
+      const elements = document.getElementsByTagName('xxx-message')
+      console.log(elements);
+      console.log(elements[0].style.top);
+      elements[0].style.top = '20px'
+      console.log(elements[0].style.top);
     }
   }
 }

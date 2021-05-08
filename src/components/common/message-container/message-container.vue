@@ -1,5 +1,7 @@
 <template>
 <div v-if="isShow"
+     ref="container"
+     class="test"
      :class="['message-container',{'success-message': type==='success'},{'error-message': type==='error'},{'warning-message': type==='warning'},{'info-message': type==='info'}]">
   {{ message }}
 </div>
@@ -27,19 +29,40 @@ export default {
   created() {
     this.messageLength = document.getElementsByTagName('xxx-message').length
     setTimeout(() => {
-      document.body.removeChild(document.getElementsByTagName('xxx-message')[0])
-    },2000)
+      document.getElementById('app').removeChild(document.getElementsByTagName('xxx-message')[0])
+      // this.resetTop()
+    },300000)
+  },
+  mounted() {
+    this.$refs.container.style.top = (this.messageLength + 1) * 50 + 'px'
+  },
+  methods: {
+    // 重新设置消息的top值
+    resetTop () {
+      const items = document.getElementsByTagName('xxx-message')
+      console.log(items);
+      for (let i = 0; i < items.length; i++) {
+        document.getElementsByTagName('xxx-message')[i].style.top = 50 * i + 'px'
+      }
+      /*this.$nextTick(() => {
+        doms.forEach((item,index) => {
+          document.getElementsByTagName('xxx-message')[index].style.top = 50 * (index + 1) + 'px'
+        })
+      })*/
+    }
   }
 }
 </script>
 
 <style scoped>
 .message-container {
-  position: relative;
-  margin: 10px auto 0;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 10px 30px;
   border-radius: 5px;
-  width: 300px;
+  min-width: 300px;
+  /*transition: top linear 500ms;*/
 }
 .success-message {
   color: #67C23A;
@@ -60,5 +83,8 @@ export default {
   color: #909399;
   background-color: #ccc;
   border-color: #909399;
+}
+.test {
+
 }
 </style>

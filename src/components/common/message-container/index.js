@@ -5,7 +5,8 @@ Message.install = (options) => {
     const container = document.createElement('xxx-message')
     const vm = createVNode(Message,options)
     render(vm, container)
-    document.body.appendChild(container)
+    // document.body.appendChild(container)
+    document.getElementById('app').appendChild(container)
 }
 
 export default Message

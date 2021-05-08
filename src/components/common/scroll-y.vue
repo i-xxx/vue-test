@@ -3,7 +3,7 @@
     <div ref="content" class="content" :style="{'user-select': clickFlag?'none':''}">
       <slot></slot>
     </div>
-    <div ref="rightScrollBar" class="right-scroll-bar"></div>
+    <div ref="rightScrollBar" class="right-scroll-bar" :style="{'opacity':isShow?1:0}"></div>
   </div>
 </template>
 
@@ -14,13 +14,27 @@ export default {
     step: {
       type: Number,
       default: 30
+    },
+    isHiddenBar: {
+      type: Boolean,
+      default: true
+    },
+    barMinHeight: {
+      type: Number,
+      default: 20
     }
   },
   data () {
     return {
       clickFlag: false,
-      totalLength: 0
+      totalLength: 0,
+      isShow: false,
+      isINContainer: false
     }
+  },
+  created() {
+    // 根据传入的值设置滚动条显隐初值
+    this.isShow = !this.isHiddenBar
   },
   mounted() {
     this.init()
@@ -31,6 +45,7 @@ export default {
       this.setScrollListener()
       this.setClickListener()
       this.setMoveListener()
+      this.setBarStyle()
     },
     // 设置容器滚动监听
     setScrollListener () {
@@ -84,15 +99,34 @@ export default {
         const oEvent = ev || event;
         if (oEvent.which === 1) {
           this.clickFlag = false
+          if (this.isHiddenBar) {
+            if (!this.isINContainer) {
+              this.isShow = false
+            }
+          }
         }
       }
     },
     // 设置移动事件监听
     setMoveListener () {
+      // 监听鼠标移动
       document.onmousemove = (ev) => {
         const oEvent = ev || event;
         if (this.clickFlag) {
           this.scrollByBar(oEvent.clientY - this.totalLength)
+        }
+      }
+      // 按需设置监听鼠标进入容器，设置滚动条显隐
+      if (this.isHiddenBar) {
+        this.$refs.container.onmouseenter = () => {
+          this.isINContainer = true
+          this.isShow = true
+        }
+        this.$refs.container.onmouseleave = () => {
+          this.isINContainer = false
+          if (!this.clickFlag) {
+            this.isShow = false
+          }
         }
       }
     },
@@ -125,6 +159,11 @@ export default {
           / (this.$refs.container.offsetHeight - this.$refs.rightScrollBar.offsetHeight)
           * (this.$refs.container.offsetHeight - this.$refs.content.offsetHeight)
           + 'px'
+    },
+    // 设置滚动条样式
+    setBarStyle () {
+      let length = Math.pow(this.$refs.container.offsetHeight, 2) / this.$refs.content.offsetHeight
+      this.$refs.rightScrollBar.style.height = (length>this.barMinHeight?length:this.barMinHeight) + 'px'
     }
   }
 }
@@ -144,7 +183,6 @@ export default {
 .right-scroll-bar {
   position: absolute;
   width: 5px;
-  height: 20px;
   background-color: #aaa;
   border-radius: 3px;
   top: 0;
