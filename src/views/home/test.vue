@@ -1,6 +1,10 @@
 <template>
   <div>
     测试页面
+    <div style="padding: 10px">
+      <button @click="ajaxTest" style="margin-right: 20px;">ajax测试</button>
+      <button @click="axiosTest">axios测试</button>
+    </div>
     <div class="father">
       <div class="child">hhh</div>
     </div>
@@ -14,6 +18,8 @@
 </template>
 
 <script>
+import testApi from "../../api/test";
+
   export default {
     name: "test",
     components: {},
@@ -22,7 +28,20 @@
     mounted() {
     },
     computed: {},
-    methods: {},
+    methods: {
+      ajaxTest () {
+        const http = new XMLHttpRequest()
+        http.open('get','http://192.168.2.95:8203/mes-base-server/api/qms-inspector-order/getList',true)
+        http.send()
+        console.log('哈哈哈');
+      },
+      axiosTest () {
+        testApi.test().then(res => {
+          console.log(res);
+          console.log('ojbk');
+        })
+      }
+    },
   }
 </script>
 

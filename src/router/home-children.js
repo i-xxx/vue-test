@@ -28,5 +28,10 @@ export default [
     path: '/home/message-test',
     component: () => import('@/views/home/message-test'),
     title: '全局message提示'
+  },
+  {
+    path: '/home/date-select',
+    component: () => import('@/views/home/date-select-test'),
+    title: '日期选择组件'
   }
 ]
