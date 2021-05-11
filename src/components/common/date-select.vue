@@ -1,6 +1,6 @@
 <template>
   <div class="container" style="display: inline-block">
-    <input ref="input" @input="input" @click.stop="inputClick" type="text" :placeholder="placeholder">
+    <input ref="input" @input="input" @click.stop="inputClick" :placeholder="placeholder">
     <div @click.stop v-if="dialogVisible" class="content">
       <div class="header">
         <div class="btn-container">
@@ -183,6 +183,9 @@ input::placeholder {
   color: #aaa;
 }
 input:hover~.close {
+  display: inline-block;
+}
+.close:hover {
   display: inline-block;
 }
 .container {
