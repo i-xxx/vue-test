@@ -29,7 +29,7 @@
         </div>
         <div class="body-content">
           <div @click="dateItemClick(item)" v-for="(item, index) in currentMonthDate" :key="index" class="date-item btn">
-            <span :style="{'color': getDateItemColor(item)}" v-if="item" :class="{'choose-item': item&&item.dateStr===choseDate}">{{item.dateStr.substring(8,10)}}</span>
+            <span :style="{'color': getDateItemColor(item)}" v-if="item" :class="{'choose-item': item&&item.dateStr===modelValue}">{{item.dateStr.substring(8,10)}}</span>
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@
         <div @click="dialogVisible=false" class="button border-button">确定</div>
       </div>
     </div>
-    <div @click="clearDate" v-if="choseDate&&clearable" class="close">
+    <div @click="clearDate" v-if="modelValue&&clearable" class="close">
       <img src="@/assets/components/img/close.png">
     </div>
   </div>
@@ -50,7 +50,7 @@ import {formatDate,getMonthInfo} from "../../utils/formatDate";
 export default {
   name: "date-select",
   props: {
-    choseDate: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -84,9 +84,9 @@ export default {
     }
   },
   watch: {
-    choseDate() {
-      this.$refs.input.value = this.choseDate
-      this.$emit('update:choseDate', this.choseDate)
+    modelValue() {
+      this.$refs.input.value = this.modelValue
+      this.$emit('update:modelValue', this.modelValue)
     }
   },
   mounted() {
@@ -95,7 +95,7 @@ export default {
   methods: {
     // 输入框输入操作
     input () {
-      this.$emit('update:choseDate', this.$refs.input.value)
+      this.$emit('update:modelValue', this.$refs.input.value)
     },
     // 输入框点击事件
     inputClick () {
@@ -144,18 +144,18 @@ export default {
       this.currentMonth = formatDate(new Date(), 'yyyy-MM')
       // 设置当前显示的月份日期信息
       this.currentMonthDate = getMonthInfo(this.currentMonth)
-      this.$emit('update:choseDate', formatDate(new Date(), 'yyyy-MM-dd'))
+      this.$emit('update:modelValue', formatDate(new Date(), 'yyyy-MM-dd'))
     },
     dateItemClick (item) {
       if (item) {
         if (this.forbiddenDate.indexOf(item.dateStr) === -1) {
-          this.$emit('update:choseDate', item.dateStr)
+          this.$emit('update:modelValue', item.dateStr)
         }
       }
     },
     clearDate () {
       this.$refs.input.value = ''
-      this.$emit('update:choseDate', '')
+      this.$emit('update:modelValue', '')
     },
     // 设置日期选项的字体颜色
     getDateItemColor (item) {

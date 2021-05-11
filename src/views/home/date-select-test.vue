@@ -2,7 +2,7 @@
 <div style="text-align:center;">
   <div style="margin: 20px;">日期选择</div>
   <div style="margin: 20px;">父组件selectDate日期：{{selectDate}}</div>
-  <date-select v-model:choseDate="selectDate"></date-select>
+  <date-select v-model="selectDate"></date-select>
 </div>
 </template>
 
