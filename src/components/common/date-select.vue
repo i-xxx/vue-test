@@ -29,12 +29,12 @@
         </div>
         <div class="body-content">
           <div @click="dateItemClick(item)" v-for="(item, index) in currentMonthDate" :key="index" class="date-item btn">
-            <span :style="{'color': (item&&forbiddenDate.indexOf(item.dateStr)!==-1)?'#ccc':''}" v-if="item" :class="{'choose-item': item&&item.dateStr===choseDate}">{{item.dateStr.substring(8,10)}}</span>
+            <span :style="{'color': getDateItemColor(item)}" v-if="item" :class="{'choose-item': item&&item.dateStr===choseDate}">{{item.dateStr.substring(8,10)}}</span>
           </div>
         </div>
       </div>
       <div class="footer">
-        <div @click="resetCurrentDate" class="button">此刻</div>
+        <div @click="resetCurrentDate" class="button">今天</div>
         <div @click="dialogVisible=false" class="button border-button">确定</div>
       </div>
     </div>
@@ -76,7 +76,9 @@ export default {
       // 星期显示格式
       dateStr: ['日','一','二','三','四','五','六'],
       // 当前显示月份的日期信息
-      currentMonthDate: []
+      currentMonthDate: [],
+      // 保存今天日期
+      currentDate: ''
     }
   },
   watch: {
@@ -100,6 +102,7 @@ export default {
     },
     // 初始化设置
     init () {
+      const date = new Date()
       // 设置页面点击事件，关闭时间选择框
       document.onclick = () => {
         if (this.dialogVisible) {
@@ -107,9 +110,11 @@ export default {
         }
       }
       // 格式化当前月份
-      this.currentMonth = formatDate(new Date(), 'yyyy-MM-dd')
+      this.currentMonth = formatDate(date, 'yyyy-MM')
       // 设置当前显示的月份日期信息
       this.currentMonthDate = getMonthInfo(this.currentMonth)
+      // 格式化保存今天日期
+      this.currentDate = formatDate(date, 'yyyy-MM-dd')
     },
     //改变显示月份
     monthChange (num) {
@@ -148,6 +153,15 @@ export default {
     clearDate () {
       this.$refs.input.value = ''
       this.choseDate = ''
+    },
+    getDateItemColor (item) {
+      if (item && this.forbiddenDate.indexOf(item.dateStr) !== -1) {
+        return '#ccc'
+      } else if (item && item.dateStr === this.currentDate) {
+        return '#409eff'
+      } else {
+        return ''
+      }
     }
   }
 }
@@ -168,6 +182,9 @@ input {
 input::placeholder {
   color: #aaa;
 }
+input:hover~.close {
+  display: inline-block;
+}
 .container {
   position: relative;
 }
@@ -176,9 +193,6 @@ input::placeholder {
   top: 5px;
   right: 5px;
   display: none;
-}
-input:hover~.close {
-  display: inline-block;
 }
 /*选择框*/
 .content {
@@ -231,8 +245,8 @@ input:hover~.close {
   text-align: center;
 }
 .choose-item {
-  background-color: #409eff;
-  color: #fff;
+  background-color: #409eff!important;
+  color: #fff!important;
 }
 .body-content .date-item {
   cursor: pointer;
