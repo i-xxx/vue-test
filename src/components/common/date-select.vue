@@ -64,7 +64,7 @@ export default {
     },
     forbiddenDate: {
       type: Array,
-      default: () => {
+      default () {
         return ['2021-05-08','2021-05-09']
       }
     }
