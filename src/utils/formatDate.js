@@ -1,18 +1,18 @@
 // 格式化日期
 export const formatDate = (date, format) => {
   const dateInfoChars = ['y','M','d','H','m','s']
-  date = new Date(date)
+  if (typeof date !== 'object') {
+    date = new Date(date)
+  }
   const year = date.getFullYear() + ''
-  const month = date.getMonth()+1 > 9 ? (date.getMonth()+1)+'' : '0'+(date.getMonth()+1)
-  const day = date.getDate() > 9 ? date.getDate()+'' : '0'+date.getDate()
-  const hour = date.getHours() > 9 ? date.getHours()+'' : '0' +date.getHours()
+  const month = date.getMonth()+1>9 ? (date.getMonth()+1)+'' : '0'+(date.getMonth()+1)
+  const day = date.getDate()>9 ? date.getDate()+'' : '0'+date.getDate()
+  const hour = date.getHours()>9 ? date.getHours()+'' : '0' +date.getHours()
   const minute = date.getMinutes()>9 ? date.getMinutes()+'' : '0' +date.getMinutes()
   const second = date.getSeconds()>9 ? date.getSeconds()+'' : '0' +date.getSeconds()
   let res = ''
   let start = 0
   for (let i = 0; i <= format.length; i++) {
-    // 出错的判断条件
-    // i===format.length||(!(format.charCodeAt(i)>=97&&format.charCodeAt(i)<=122))||(!(format.charCodeAt(i)>=65&&format.charCodeAt(i)<=90))
     if (i===format.length||dateInfoChars.indexOf(format[i])===-1) {
       switch (format[i-1]) {
         case 'y': res += year.substring(year.length-i+start, i-start)

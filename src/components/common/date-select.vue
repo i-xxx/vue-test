@@ -50,6 +50,10 @@ import {formatDate,getMonthInfo} from "../../utils/formatDate";
 export default {
   name: "date-select",
   props: {
+    choseDate: {
+      type: String,
+      default: ''
+    },
     placeholder: {
       type: String,
       default: '请选择'
@@ -61,7 +65,7 @@ export default {
     forbiddenDate: {
       type: Array,
       default: () => {
-        return ['2021-05-08']
+        return ['2021-05-08','2021-05-09']
       }
     }
   },
@@ -69,8 +73,6 @@ export default {
     return {
       // 日期选择框显隐
       dialogVisible: false,
-      // 当前选择的日期
-      choseDate: '',
       // 当前月份
       currentMonth: '',
       // 星期显示格式
@@ -84,6 +86,7 @@ export default {
   watch: {
     choseDate() {
       this.$refs.input.value = this.choseDate
+      this.$emit('update:choseDate', this.choseDate)
     }
   },
   mounted() {
@@ -92,7 +95,7 @@ export default {
   methods: {
     // 输入框输入操作
     input () {
-      this.choseDate = this.$refs.input.value
+      this.$emit('update:choseDate', this.$refs.input.value)
     },
     // 输入框点击事件
     inputClick () {
@@ -141,19 +144,20 @@ export default {
       this.currentMonth = formatDate(new Date(), 'yyyy-MM')
       // 设置当前显示的月份日期信息
       this.currentMonthDate = getMonthInfo(this.currentMonth)
-      this.choseDate = formatDate(new Date(), 'yyyy-MM-dd')
+      this.$emit('update:choseDate', formatDate(new Date(), 'yyyy-MM-dd'))
     },
     dateItemClick (item) {
       if (item) {
         if (this.forbiddenDate.indexOf(item.dateStr) === -1) {
-          this.choseDate = item.dateStr
+          this.$emit('update:choseDate', item.dateStr)
         }
       }
     },
     clearDate () {
       this.$refs.input.value = ''
-      this.choseDate = ''
+      this.$emit('update:choseDate', '')
     },
+    // 设置日期选项的字体颜色
     getDateItemColor (item) {
       if (item && this.forbiddenDate.indexOf(item.dateStr) !== -1) {
         return '#ccc'

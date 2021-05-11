@@ -1,8 +1,7 @@
 <template>
 <div v-if="isShow"
      ref="container"
-     class="test"
-     :class="['message-container',{'success-message': type==='success'},{'error-message': type==='error'},{'warning-message': type==='warning'},{'info-message': type==='info'}]">
+     :class="['xxx-message','message-container',{'success-message': type==='success'},{'error-message': type==='error'},{'warning-message': type==='warning'},{'info-message': type==='info'}]">
   {{ message }}
 </div>
 </template>
@@ -27,11 +26,11 @@ export default {
     }
   },
   created() {
-    this.messageLength = document.getElementsByTagName('xxx-message').length
+    this.messageLength = document.getElementsByClassName('xxx-message').length
     setTimeout(() => {
-      document.getElementById('app').removeChild(document.getElementsByTagName('xxx-message')[0])
-      // this.resetTop()
-    },300000)
+      document.body.removeChild(document.getElementsByClassName('xxx-message')[0])
+      this.resetTop()
+    },3000)
   },
   mounted() {
     this.$refs.container.style.top = (this.messageLength + 1) * 50 + 'px'
@@ -39,16 +38,10 @@ export default {
   methods: {
     // 重新设置消息的top值
     resetTop () {
-      const items = document.getElementsByTagName('xxx-message')
-      console.log(items);
+      const items = document.getElementsByClassName('xxx-message')
       for (let i = 0; i < items.length; i++) {
-        document.getElementsByTagName('xxx-message')[i].style.top = 50 * i + 'px'
+        document.getElementsByClassName('xxx-message')[i].style.top = 50 * (i + 1) + 'px'
       }
-      /*this.$nextTick(() => {
-        doms.forEach((item,index) => {
-          document.getElementsByTagName('xxx-message')[index].style.top = 50 * (index + 1) + 'px'
-        })
-      })*/
     }
   }
 }
@@ -62,7 +55,7 @@ export default {
   padding: 10px 30px;
   border-radius: 5px;
   min-width: 300px;
-  /*transition: top linear 500ms;*/
+  transition: top linear 100ms;
 }
 .success-message {
   color: #67C23A;
