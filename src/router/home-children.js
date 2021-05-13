@@ -33,5 +33,15 @@ export default [
     path: '/home/date-select',
     component: () => import('@/views/home/date-select-test'),
     title: '日期选择组件'
+  },
+  {
+    path: '/home/count-down',
+    component: () => import('@/views/home/count-down'),
+    title: '倒计时组件'
+  },
+  {
+    path: '/home/image-preview',
+    component: () => import('@/views/home/image-preview'),
+    title: '图片预览组件'
   }
 ]

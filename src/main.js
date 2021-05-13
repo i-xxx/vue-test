@@ -13,7 +13,7 @@ app.use(store)
 app.use(router)
 app.use(ElementPlus)
 app.config.globalProperties.$xxx_message = (data) => {
-    Message.install(data)
+  Message.install(data)
 }
 
 app.mount('#app')

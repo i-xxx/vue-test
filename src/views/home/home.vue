@@ -16,8 +16,7 @@ import homeChildren from '@/router/home-children'
 
   export default {
     name: 'Home',
-    components: {
-    },
+    components: {},
     data() {
       return {
         timer: '',
@@ -80,6 +79,7 @@ import homeChildren from '@/router/home-children'
     .right-part {
       width: calc(100% - 200px);
       position: fixed;
+      overflow-y: auto;
       top: 0;
       right: 0;
       bottom: 0;

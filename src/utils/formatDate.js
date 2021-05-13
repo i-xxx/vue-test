@@ -15,17 +15,17 @@ export const formatDate = (date, format) => {
   for (let i = 0; i <= format.length; i++) {
     if (i===format.length||dateInfoChars.indexOf(format[i])===-1) {
       switch (format[i-1]) {
-        case 'y': res += year.substring(year.length-i+start, i-start)
+        case 'y': res += year.substring(year.length-i+start, year.length)
               break
-        case 'M': res += month.substring(month.length-i+start, i-start)
+        case 'M': res += month.substring(month.length-i+start, month.length)
               break
-        case 'd': res += day.substring(day.length-i+start, i-start)
+        case 'd': res += day.substring(day.length-i+start, day.length)
               break
-        case 'H': res += hour.substring(hour.length-i+start, i-start)
+        case 'H': res += hour.substring(hour.length-i+start, hour.length)
               break
-        case 'm': res += minute.substring(minute.length-i+start, i-start)
+        case 'm': res += minute.substring(minute.length-i+start, minute.length)
               break
-        case 's': res += second.substring(second.length-i+start, i-start)
+        case 's': res += second.substring(second.length-i+start, second.length)
               break
       }
       if (i!==format.length) {

@@ -189,4 +189,8 @@ export default {
   right: 0;
   cursor: pointer;
 }
+.right-scroll-bar,
+.content {
+  transition: top linear 100ms;
+}
 </style>

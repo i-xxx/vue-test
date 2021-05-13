@@ -16,7 +16,10 @@ export default {
       selectDate: ''
     }
   },
-  components: { dateSelect }
+  components: { dateSelect },
+  created() {
+    console.log('date-select组件');
+  }
 }
 </script>
 

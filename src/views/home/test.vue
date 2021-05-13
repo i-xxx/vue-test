@@ -24,6 +24,7 @@ import testApi from "../../api/test";
     name: "test",
     components: {},
     created() {
+      console.log('test组件');
     },
     mounted() {
     },
