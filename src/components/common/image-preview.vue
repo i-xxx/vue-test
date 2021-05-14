@@ -2,6 +2,9 @@
 <div ref="container">
   <slot></slot>
   <div @click="previewVisible=false" v-if="previewVisible" class="preview-container">
+    <div @click.stop ref="big-preview-content" class="big-preview-content">
+      <img style="height: 100%;width: auto;" :src="imgList[currentIndex].src" alt="">
+    </div>
     <div @click.stop ref="small-preview-content" class="small-preview-content">
       <div @click="currentIndex=index" :class="['small-preview-item',{'active-small-preview-item': currentIndex===index}]" v-for="(item,index) in imgList" :key="index">
         <img :src="item.src" alt="">
@@ -20,6 +23,8 @@ export default {
       previewVisible: false,
       currentIndex: 0
     }
+  },
+  watch: {
   },
   created() {
   },
@@ -41,18 +46,28 @@ export default {
           this.previewVisible = true
           this.currentIndex = index
           this.currentPicChange()
+          // 设置小图片监听事件
+          this.$nextTick(() => {
+            const smallItems = this.$refs["small-preview-content"].childNodes
+            smallItems.forEach(item => {
+              if (item.nodeName.toLowerCase() === 'div') {
+                item.onclick = () => {
+                  console.log('点击了小图片');
+                  this.currentPicChange()
+                }
+              }
+            })
+          })
+          // this.$refs["big-preview-content"]
         }
       })
     },
     currentPicChange () {
       this.$nextTick(() => {
-        const left = this.$refs["small-preview-content"].offsetLeft
+        const windowWidth = document.body.offsetWidth
         const smallWidth = document.getElementsByClassName('small-preview-item')[this.currentIndex].offsetWidth
         const smallLeft = document.getElementsByClassName('small-preview-item')[this.currentIndex].offsetLeft
-        console.log('当前小图标宽度',smallWidth,'px');
-        console.log('距离左侧',left,'px');
-        console.log('当前小图标距离左侧',smallLeft,'px');
-        this.$refs["small-preview-content"].style.left = left + smallLeft + smallWidth / 2 + 'px'
+        this.$refs["small-preview-content"].style.left = (windowWidth / 2) - smallLeft - smallWidth / 2 + 'px'
       })
     }
   },
@@ -61,6 +76,8 @@ export default {
 </script>
 
 <style scoped>
+img {
+}
 .preview-container {
   position: fixed;
   top: 0;
@@ -69,12 +86,19 @@ export default {
   left: 0;
   background-color: rgba(100,100,100,.8);
 }
-.small-preview-content {
+.big-preview-content {
   position: absolute;
-  bottom: 10px;
   left: 50%;
-  transform: translateX(-50%);
-  background-color: #fff;
+  top: 50%;
+  user-select: none;
+  height: calc(100% - 200px);
+  transform: translate(-50%, calc(-50% - 40px));
+}
+.small-preview-content {
+  font-size: 0;
+  position: absolute;
+  bottom: 50px;
+  padding: 0;
   display: flex;
   align-items: center;
   transition: left linear 200ms;

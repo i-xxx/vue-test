@@ -34,7 +34,7 @@ export default {
     },
     width: {
       type: String,
-      default: '50%'
+      default: '400px'
     },
     title: {
       type: String,
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     changeDialogVisible () {
-      this.$emit('dialogClose')
+      this.$emit('update:dialog-visible', false)
     },
     dialogConfirm () {
       this.$emit('dialogConfirm')
@@ -84,11 +84,11 @@ export default {
   transform: translate(-50%,-50%);
 }
 .dialog-header {
-  padding: 1rem;
+  padding: 10px;
 }
 
 .dia-footer {
-  padding: 1rem 2rem;
+  padding: 10px 20px;
 }
 
 /*消除元素间的间隙*/
@@ -100,34 +100,38 @@ export default {
 .dialog-header {
   display: flex;
   justify-content: space-between;
-  font-size: 1.8rem;
-  line-height: 2rem;
+  font-size: 18px;
+  line-height: 20px;
 }
 .dialog-header-title {
-  width: calc(100% - 2rem);
-  min-height: 2rem;
+  width: calc(100% - 20px);
+  min-height: 20px;
 }
 .dialog-close {
+  user-select: none;
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  line-height: 2rem;
+  width: 20px;
+  text-align: center;
+  top: 10px;
+  right: 10px;
+  line-height: 20px;
 }
 
 .dialog-body {
-  padding: 2rem;
+  padding: 20px;
   background-color: #fff;
 }
 
 .dia-footer {
   text-align: right;
   background-color: #fff;
-  padding-bottom: 2rem;
+  padding-bottom: 20px;
 }
 .dialog-btn {
-  font-size: 1rem;
-  padding: 0.5rem 2rem;
-  border-radius: 0.3rem;
+  user-select: none;
+  font-size: 10px;
+  padding: 5px 10px;
+  border-radius: 3px;
   font-weight: 600;
 }
 .dialog-confirm {

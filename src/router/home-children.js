@@ -43,5 +43,10 @@ export default [
     path: '/home/image-preview',
     component: () => import('@/views/home/image-preview'),
     title: '图片预览组件'
+  },
+  {
+    path: '/home/confirm-dialog',
+    component: () => import('@/views/home/confirm-dialog'),
+    title: '全局确认提示弹出框组件'
   }
 ]
