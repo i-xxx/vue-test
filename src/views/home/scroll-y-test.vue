@@ -31,7 +31,7 @@ export default {
     }
   },
   created() {
-    this.currentChange()
+    this.currentChange(true)
   },
   methods: {
     before () {
@@ -43,12 +43,14 @@ export default {
     after () {
       if (this.currentIndex < 100000) {
         this.currentIndex++
-        this.currentChange()
+        this.currentChange(true)
       }
     },
-    currentChange () {
-      for (let i = 0; i < 100; i++) {
-        this.list.push('哈哈哈哈哈'+(i+this.currentIndex*100))
+    currentChange (flag) {
+      if (flag) {
+        for (let i = 0; i < 100; i++) {
+          this.list.push('哈哈哈哈哈'+(i+this.currentIndex*100))
+        }
       }
     }
   }
